@@ -7,7 +7,11 @@ import pandas as pd
 
 
 df = pd.read_csv("realistic_restaurant_reviews.csv")
+df.columns = df.columns.str.strip().str.lower()
+
 embeddings=OllamaEmbeddings(model="mxbai-embed-large")
+
+
 
 db_location = "./chrome_langchain_db"
 add_documents = not os.path.exists(db_location)
@@ -18,8 +22,8 @@ if add_documents:
 
     for i,row in df.iterrows():
         document =Document(
-            page_content = str(row["Title"]+ " " +row["Review"]),
-            metadata={"rating":row["rating"],"date":row["Date"]},
+            page_content = str(row["title"])+ " " +str(row["review"]),
+            metadata={"rating":row["rating"],"date":row["date"]},
             id=str(i)
         )
         ids.append(str(i))
