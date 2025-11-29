@@ -5,6 +5,7 @@ import os
 import pandas as pd
 
 df = pd.read_csv("realistic_restaurant_reviews.csv")
+embeddings=OllamaEmbeddings(model="mxbai-embed-large")
 
 db_location = "./chrome_langchain_db"
 add_documents = not os.path.exists(db_location)
@@ -22,3 +23,9 @@ if add_documents:
         ids.append(str(i))
         documents.append(document)
     
+vector_store = Chroma(
+    collection_name="restaurant_reviews",
+    persist_directory=db_location,
+    embedding_function=embeddings
+
+)
